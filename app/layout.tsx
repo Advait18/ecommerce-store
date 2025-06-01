@@ -5,7 +5,7 @@ import "./globals.css"
 import { Toaster } from "@/components/ui/toaster"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { Home, Settings } from "lucide-react"
+import { Home, Settings, ShoppingCart } from "lucide-react"
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -35,6 +35,12 @@ export default function RootLayout({
                   <Link href="/">
                     <Home className="h-4 w-4 mr-2" />
                     Store
+                  </Link>
+                </Button>
+                <Button variant="ghost" size="sm" asChild>
+                  <Link href="/cart">
+                    <ShoppingCart className="h-4 w-4 mr-2" />
+                    Cart
                   </Link>
                 </Button>
                 <Button variant="ghost" size="sm" asChild>

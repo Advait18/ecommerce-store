@@ -10,14 +10,14 @@ export interface DiscountCode {
 }
 
 const DISCOUNT_ORDER_INTERVAL = 3 // Every 3rd order gets a discount code
-const DISCOUNT_PERCENTAGE = 10 // 10% discount
+const DISCOUNT_PERCENTAGE = 10
 
 let discountCodes: DiscountCode[] = []
 
 export class DiscountService {
     static readonly DISCOUNT_PERCENTAGE = DISCOUNT_PERCENTAGE
 
-    // Generate a random discount code
+    // Generates a random discount code
     private static generateCode(): string {
         const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
         let result = "SAVE"
@@ -27,13 +27,13 @@ export class DiscountService {
         return result
     }
 
-    // Check if a new discount code should be generated based on order count
+    // Checks if a new discount code should be generated based on order count
     static shouldGenerateDiscount(): boolean {
         const totalOrders = OrderService.getTotalOrderCount()
         return totalOrders > 0 && totalOrders % DISCOUNT_ORDER_INTERVAL === 0
     }
 
-    // Generate a new discount code
+    // Generates a new discount code
     static generateDiscount(): string {
         const code = this.generateCode()
 
@@ -47,7 +47,7 @@ export class DiscountService {
         return code
     }
 
-    // Validate a discount code and calculate discount amount
+    // Validates a discount code and calculate discount amount
     static validateDiscount(
         code: string,
         cartTotal: number,
@@ -80,7 +80,7 @@ export class DiscountService {
         }
     }
 
-    // Mark a discount code as used
+    // Marks a discount code as used
     static useDiscount(code: string): boolean {
         const discount = discountCodes.find((d) => d.code === code)
 
@@ -93,22 +93,22 @@ export class DiscountService {
         return false
     }
 
-    // Get all discount codes
+    // Gets all discount codes
     static getAllDiscountCodes(): DiscountCode[] {
         return [...discountCodes]
     }
 
-    // Get available (unused) discount codes
+    // Gets available (unused) discount codes
     static getAvailableDiscountCodes(): DiscountCode[] {
         return discountCodes.filter((d) => !d.isUsed)
     }
 
-    // Get used discount codes
+    // Gets used discount codes
     static getUsedDiscountCodes(): DiscountCode[] {
         return discountCodes.filter((d) => d.isUsed)
     }
 
-    // Get the next order number that will qualify for a discount
+    // Gets the next order number that will qualify for a discount
     static getNextDiscountOrderNumber(): number {
         const totalOrders = OrderService.getTotalOrderCount()
         const remainder = totalOrders % DISCOUNT_ORDER_INTERVAL
@@ -120,7 +120,7 @@ export class DiscountService {
         }
     }
 
-    // Check if a specific order number qualifies for a discount
+    // Checks if a specific order number qualifies for a discount
     static orderQualifiesForDiscount(orderNumber: number): boolean {
         return orderNumber > 0 && orderNumber % DISCOUNT_ORDER_INTERVAL === 0
     }

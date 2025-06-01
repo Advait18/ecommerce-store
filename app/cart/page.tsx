@@ -194,7 +194,7 @@ function CartPage() {
   const finalTotal = cart.total - (appliedDiscount?.amount || 0);
   return (
     <div className="flex justify-center px-4">
-      <Card className="sticky top-6 mt-10 px-5 py-10 w-full max-w-2xl mx-auto flex flex-col">
+      <Card className="sticky top-6 mt-10 px-5 py-10 w-full min-w-fit max-w-2xl mx-auto flex flex-col">
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <ShoppingCart className="h-5 w-5" />

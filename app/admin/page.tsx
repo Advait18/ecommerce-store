@@ -1,71 +1,73 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Separator } from "@/components/ui/separator"
-import { RefreshCw, Settings, TrendingUp, Percent, Package } from "lucide-react"
+import { useState, useEffect } from "react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Separator } from "@/components/ui/separator";
+import { RefreshCw, Settings, TrendingUp, Percent, Package, LogOut } from "lucide-react";
+import { signOut } from "next-auth/react";
+import { toast } from "@/hooks/use-toast";
 
 interface AdminStats {
-    totalItemsPurchased: number
-    totalPurchaseAmount: number
+    totalItemsPurchased: number,
+    totalPurchaseAmount: number,
     discountCodes: Array<{
-        code: string
-        isUsed: boolean
-        createdAt: string
-        usedAt?: string
-    }>
-    totalDiscountAmount: number
-    totalOrders: number
-    nextDiscountOrderNumber: number
-}
+        code: string,
+        isUsed: boolean,
+        createdAt: string,
+        usedAt?: string,
+    }>,
+    totalDiscountAmount: number,
+    totalOrders: number,
+    nextDiscountOrderNumber: number,
+};
 
 export default function AdminDashboard() {
-    const [stats, setStats] = useState<AdminStats | null>(null)
-    const [isLoading, setIsLoading] = useState(true)
-    const [isGenerating, setIsGenerating] = useState(false)
+    const [stats, setStats] = useState<AdminStats | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [isGenerating, setIsGenerating] = useState(false);
 
     useEffect(() => {
-        fetchStats()
-    }, [])
+        fetchStats();
+    }, []);
 
     const fetchStats = async () => {
-        setIsLoading(true)
+        setIsLoading(true);
         try {
-            const response = await fetch("/api/admin/stats")
+            const response = await fetch("/api/admin/stats");
             if (response.ok) {
-                const data = await response.json()
-                setStats(data)
+                const data = await response.json();
+                setStats(data);
             }
         } catch (error) {
-            console.error("Error fetching stats:", error)
+            console.error("Error fetching stats:", error);
         } finally {
-            setIsLoading(false)
+            setIsLoading(false);
         }
-    }
+    };
 
     const generateDiscountCode = async () => {
-        setIsGenerating(true)
+        setIsGenerating(true);
         try {
             const response = await fetch("/api/admin/generate-discount", {
                 method: "POST",
-            })
+            });
 
             if (response.ok) {
-                const result = await response.json()
-                alert(`Generated discount code: ${result.code}`)
-                fetchStats() // Refresh stats
+                const result = await response.json();
+                alert(`Generated discount code: ${result.code}`);
+                fetchStats(); // Refresh stats
             } else {
-                const error = await response.json()
-                alert(`Error: ${error.message}`)
+                const error = await response.json();
+                alert(`Error: ${error.message}`);
             }
         } catch (error) {
-            alert("Failed to generate discount code")
+            alert("Failed to generate discount code");
         } finally {
-            setIsGenerating(false)
+            setIsGenerating(false);
         }
-    }
+    };
 
     if (isLoading) {
         return (
@@ -74,7 +76,7 @@ export default function AdminDashboard() {
                     <RefreshCw className="h-8 w-8 animate-spin" />
                 </div>
             </div>
-        )
+        );
     }
 
     if (!stats) {
@@ -88,7 +90,7 @@ export default function AdminDashboard() {
                     </Button>
                 </div>
             </div>
-        )
+        );
     }
 
     return (
@@ -106,6 +108,10 @@ export default function AdminDashboard() {
                     <Button onClick={generateDiscountCode} disabled={isGenerating}>
                         {isGenerating ? <RefreshCw className="h-4 w-4 mr-2 animate-spin" /> : <Percent className="h-4 w-4 mr-2" />}
                         Generate Discount Code
+                    </Button>
+                    <Button onClick={async () => { await signOut({ callbackUrl: "/" }) }} variant="outline" >
+                        <LogOut className="h-4 w-4 mr-2" />
+                        Logout
                     </Button>
                 </div>
             </div>
@@ -192,5 +198,5 @@ export default function AdminDashboard() {
                 </CardContent>
             </Card>
         </div>
-    )
+    );
 }

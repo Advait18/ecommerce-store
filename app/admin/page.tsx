@@ -51,7 +51,7 @@ export default function AdminDashboard() {
         setIsGenerating(true);
         try {
             const response = await fetch("/api/admin/generate-discount", {
-                method: "POST",
+                method: "GET",
             });
 
             if (response.ok) {

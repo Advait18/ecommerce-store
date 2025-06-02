@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server"
 import { DiscountService } from "@/lib/services/discount-service"
 
-// POST /api/admin/generate-discount - Manually generate a discount code
-export async function POST() {
+// GET /api/admin/generate-discount - Manually generate a discount code
+export async function GET() {
     try {
         const discountCode = DiscountService.generateDiscount()
 
